@@ -4,6 +4,7 @@ Ein leichtgewichtiges Frontend im Galileo-Look, mit dem Redakteur:innen bildstar
 
 ## Inhalte
 - `index.html`: Komplettes UI im Galileo-Design mit Filterlogik, Ranking nach Schlagwort-Treffern und Live-Suche nach Newsfeeds (24h/7/30 Tage).
+- `index.html`: Komplettes UI im Galileo-Design mit Filterlogik und Ranking nach Schlagwort-Treffern.
 - `topics.json`: Vorausgefüllte Themenideen mit Zusammenfassung, Relevanz, visueller Umsetzung, Quellen und Storyline (5–20 Minuten).
 - `.github/workflows/deploy.yml`: Automatisches Deploy auf GitHub Pages.
 
@@ -14,6 +15,8 @@ Ein leichtgewichtiges Frontend im Galileo-Look, mit dem Redakteur:innen bildstar
    Actions aktiviert wird).
 3. Workflow `.github/workflows/deploy.yml` wird bei jedem Push auf `main` ausgeführt, konfiguriert Pages automatisch und baut
    die statische Seite.
+2. In den Repository-Einstellungen unter **Pages** **Build and Deployment** auf "GitHub Actions" stellen.
+3. Workflow `.github/workflows/deploy.yml` wird bei jedem Push auf `main` ausgeführt und baut die statische Seite.
 4. Nach dem Deploy unter `https://<user>.github.io/<repo>/` öffnen (URL steht auch in der Actions-Ansicht).
 
 ### Lokal testen
