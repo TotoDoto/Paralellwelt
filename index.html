@@ -167,6 +167,45 @@
       border: 1px solid var(--border);
       box-shadow: none;
     }
+    button.ghost {
+      background: rgba(255,255,255,0.06);
+      color: #e7ecf7;
+      border: 1px dashed var(--border);
+      box-shadow: none;
+    }
+    .pill-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: #e9f2ff;
+      font-weight: 600;
+    }
+    .pill-toggle.active { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,183,255,0.16); }
+    .input-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+    .input-row input, .input-row select {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: #e7e9ef;
+      padding: 10px 12px;
+      border-radius: 10px;
+      min-width: 200px;
+      font-size: 0.95rem;
+    }
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      font-size: 0.9rem;
+    }
     .results-meta {
       margin: 18px 0 12px;
       color: var(--muted);
@@ -268,20 +307,35 @@
       <div class="hero-pill">✅ Quellencheck</div>
     </div>
   </header>
-  <main>
-    <section class="panel" aria-labelledby="filter-heading">
-      <div class="actions">
-        <div>
-          <strong id="filter-heading">Galileo-Schlagwörter</strong>
-          <div class="results-meta" id="selected-info">Lade Themen …</div>
+    <main>
+      <section class="panel" aria-labelledby="filter-heading">
+        <div class="actions">
+          <div>
+            <strong id="filter-heading">Galileo-Schlagwörter</strong>
+            <div class="results-meta" id="selected-info">Lade Themen …</div>
+          </div>
+          <div style="flex:1"></div>
+          <button id="select-all">Alle auswählen</button>
+          <button id="select-none" class="secondary">Zurücksetzen</button>
         </div>
-        <div style="flex:1"></div>
-        <button id="select-all">Alle auswählen</button>
-        <button id="select-none" class="secondary">Zurücksetzen</button>
-      </div>
-      <p style="margin: 2px 0 10px; color: var(--muted);">Nutze die Auswahl, um die Reihenfolge der Themenkarten wie in der Sendungsredaktion zu priorisieren.</p>
-      <div class="filters" id="keyword-grid"></div>
-    </section>
+        <p style="margin: 2px 0 10px; color: var(--muted);">Nutze die Auswahl, um die Reihenfolge der Themenkarten wie in der Sendungsredaktion zu priorisieren.</p>
+        <div class="input-row" role="group" aria-label="Live-Themen-Suche">
+          <input id="query" type="text" placeholder="z.B. Energie, KI, Ernährung" aria-label="Themen-Suchbegriff" />
+          <select id="time-window" aria-label="Zeitfenster">
+            <option value="1d">letzte 24h</option>
+            <option value="7d" selected>letzte 7 Tage</option>
+            <option value="30d">letzte 30 Tage</option>
+          </select>
+          <button id="fetch-live">Live-Themen finden</button>
+          <span class="status-chip" id="live-status">Bereit für Live-Suche</span>
+        </div>
+        <div class="actions" style="gap: 12px; margin-top: 12px;">
+          <span class="pill-toggle active" id="ranking-pill">🔝 Ranking aktiv</span>
+          <span class="pill-toggle active" id="source-pill">✅ Quellencheck aktiv</span>
+          <button id="highlight-live" class="ghost">Nur Live-Ergebnisse zeigen</button>
+        </div>
+        <div class="filters" id="keyword-grid"></div>
+      </section>
 
     <section style="margin-top: 18px;" aria-live="polite">
       <div class="results-meta" id="results-meta">Bereite Ergebnisse vor …</div>
@@ -305,7 +359,9 @@
 
     const state = {
       topics: [],
+      liveTopics: [],
       selected: new Set(KEYWORDS),
+      showOnlyLive: false,
     };
 
     const keywordGrid = document.getElementById('keyword-grid');
@@ -313,6 +369,10 @@
     const resultsContainer = document.getElementById('results');
     const resultsMeta = document.getElementById('results-meta');
     const emptyState = document.getElementById('empty-state');
+    const liveStatus = document.getElementById('live-status');
+    const highlightLiveBtn = document.getElementById('highlight-live');
+    const queryInput = document.getElementById('query');
+    const timeWindowSelect = document.getElementById('time-window');
 
     function renderFilters() {
       keywordGrid.innerHTML = '';
@@ -343,7 +403,8 @@
 
     function renderTopics() {
       resultsContainer.innerHTML = '';
-      const scored = state.topics
+      const pool = state.showOnlyLive ? state.liveTopics : [...state.topics, ...state.liveTopics];
+      const scored = pool
         .map((topic) => ({ topic, ...scoreTopic(topic) }))
         .filter(({ score }) => score > 0)
         .sort((a, b) => (b.score - a.score) || a.topic.title.localeCompare(b.topic.title));
@@ -354,9 +415,11 @@
         : `${selectedCount} Schlagwörter aktiv: ${[...state.selected].join(', ')}`;
       selectedInfo.textContent = selectedText;
 
+      const liveCount = state.liveTopics.length;
+      const scopeText = state.showOnlyLive ? 'nur Live-Quellen' : 'Kuratiert + Live-Quellen';
       resultsMeta.textContent = scored.length
-        ? `Sortiert nach Treffern: ${scored.length} Themen mit mindestens einem Keyword.`
-        : 'Keine Treffer für die aktuelle Auswahl.';
+        ? `${scopeText}: ${scored.length} Themen mit mindestens einem Keyword. Live: ${liveCount}`
+        : `Keine Treffer für die aktuelle Auswahl (${scopeText}).`;
 
       emptyState.hidden = scored.length > 0;
 
@@ -398,6 +461,47 @@
       renderTopics();
     }
 
+    async function fetchLiveTopics() {
+      const query = queryInput.value.trim() || 'Galileo Themen';
+      const windowParam = timeWindowSelect.value;
+      const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}+when:${windowParam}&hl=de&gl=DE&ceid=DE:de`;
+      liveStatus.textContent = 'Sammle Live-Quellen …';
+      liveStatus.style.color = '#e7e9ef';
+      try {
+        const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`);
+        if (!res.ok) throw new Error(`Status ${res.status}`);
+        const text = await res.text();
+        const parsed = new DOMParser().parseFromString(text, 'text/xml');
+        const items = Array.from(parsed.querySelectorAll('item')).slice(0, 12);
+        const now = new Date();
+        state.liveTopics = items.map((item, idx) => {
+          const title = item.querySelector('title')?.textContent || `Live-Story ${idx + 1}`;
+          const link = item.querySelector('link')?.textContent || '';
+          const pubDate = item.querySelector('pubDate')?.textContent;
+          const ageHours = pubDate ? Math.max(1, Math.round((now - new Date(pubDate)) / 36e5)) : null;
+          const baseText = `${title} ${link}`;
+          const derived = KEYWORDS.filter((kw) => baseText.toLowerCase().includes(kw.toLowerCase()));
+          const keywords = derived.length ? derived : ['gerade aktuell'];
+          return {
+            title: `Live: ${title}`,
+            summary: `Frisch recherchiert via Newsfeed (${windowParam}). ${title}`,
+            relevance: `Aktuell${ageHours ? ` (~${ageHours}h alt)` : ''}. Kann als Aufhänger für Galileo dienen – prüfen, ob Bilder/Protagonisten kurzfristig erreichbar sind.`,
+            visual_idea: 'Schnitt aus O-Tönen, Vor-Ort-Handyfootage, Social Clips und schnellen Studio-Grafiken im Galileo-Farbraum.',
+            sources: [link || 'Newsfeed-Link'],
+            storyline: '1) Einstieg über Schlagzeile und Bildmaterial; 2) Faktencheck mit verlässlichen Quellen; 3) Einordnung durch Expert:in; 4) Zuspitzung auf Galileo-Perspektive; 5) Ausblick/Next Steps.',
+            keywords,
+          };
+        });
+        liveStatus.textContent = `Live-Quellen aktualisiert (${state.liveTopics.length})`;
+        liveStatus.style.color = 'var(--accent)';
+        update();
+      } catch (err) {
+        console.error(err);
+        liveStatus.textContent = `Live-Suche fehlgeschlagen: ${err.message}`;
+        liveStatus.style.color = '#ffb4a2';
+      }
+    }
+
     async function init() {
       try {
         const res = await fetch('topics.json');
@@ -419,6 +523,23 @@
     });
     document.getElementById('select-none').addEventListener('click', () => {
       state.selected = new Set();
+      update();
+    });
+
+    document.getElementById('fetch-live').addEventListener('click', () => {
+      fetchLiveTopics();
+    });
+    queryInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        fetchLiveTopics();
+      }
+    });
+    highlightLiveBtn.addEventListener('click', () => {
+      state.showOnlyLive = !state.showOnlyLive;
+      highlightLiveBtn.textContent = state.showOnlyLive ? 'Kuratiert + Live anzeigen' : 'Nur Live-Ergebnisse zeigen';
+      highlightLiveBtn.classList.toggle('secondary', !state.showOnlyLive);
+      highlightLiveBtn.classList.toggle('ghost', state.showOnlyLive);
       update();
     });
 
