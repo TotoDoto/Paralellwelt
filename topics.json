@@ -1,0 +1,81 @@
+[
+  {
+    "title": "Hyperloop-Tests in Europa: Was bleibt vom Versprechen der Schallgeschwindigkeit?",
+    "summary": "Start-ups in den Niederlanden, Spanien und Polen testen neue Hyperloop-Strecken und Kapseln. Ein Team erlaubt erstmals Kameras im Tunnel, um zu zeigen, ob das Konzept nach dem Investoren-Hype noch lebt.",
+    "relevance": "Verbindet aktuelle Mobilitätsdebatten mit Energiewende und zeigt, ob die Technologie wirklich kurz vor dem Durchbruch steht.",
+    "visual_idea": "FPV-Drohnenflüge durch den Testtunnel, Wärmebildaufnahmen der Magnetfelder, Split-Screen mit Animation vs. Realbild der Fahrt.",
+    "sources": [
+      "https://hardt.global/",
+      "https://zeleros.com/",
+      "https://nevprail.pl/",
+      "Interviews mit TU Delft & ETH Zürich Forschenden"
+    ],
+    "storyline": "5-12 Min: Einstieg mit spektakulären Drohnenbildern, dann Faktencheck: Energiebedarf, Kosten, Sicherheit. Vergleich mit Hochgeschwindigkeitszug. Abschluss: Was bedeutet das für Europa bis 2030?",
+    "keywords": ["Bildstark", "Wissenschaft", "Innovation", "gerade aktuell", "Gesellschaftlich Relevant"]
+  },
+  {
+    "title": "Mikroabenteuer Nachtzug: Europas vergessene Schlafwagen kehren zurück",
+    "summary": "Neue Nachtzuglinien verbinden wieder deutsche Städte mit Südeuropa. Wie fühlt sich CO2-sparendes Reisen wirklich an? Wir begleiten junge Reisende auf der Testfahrt." ,
+    "relevance": "Klimafreundliche Mobilität ist politisch gewünscht, aber es gibt Komfort- und Preisdebatten. Beitrag zeigt, wie alltagstauglich die Renaissance ist.",
+    "visual_idea": "Zeitraffer der Abfahrt, Drohne über den Bahnhof, 3D-Karte der Route, intime Kabinenaufnahmen mit Cine-Lens.",
+    "sources": [
+      "https://www.nightjet.com/",
+      "https://europeansleeper.eu/",
+      "Gespräche mit Verkehrsclub Deutschland (VCD)"
+    ],
+    "storyline": "8-15 Min: Protagonist steigt in Berlin ein, Roadmovie-Charakter. Kapitel: Buchung, Komforttest, Sicherheit, Kostenvergleich zum Flug. Finale: CO2-Bilanz und Ausblick auf neue Linien.",
+    "keywords": ["Bildstark", "Umwelt", "Gesellschaftlich Relevant", "Abenteuer", "gerade aktuell"]
+  },
+  {
+    "title": "Biolumineszenz an der Nordsee: Die Nacht, in der das Meer leuchtet",
+    "summary": "Algenblüten sorgen an wenigen Nächten im Jahr für blaues Leuchten an deutschen Küsten. Forschungsboote und Strandbesucher erleben ein seltenes Naturkino.",
+    "relevance": "Klimawandel verschiebt Algenblüten und beeinflusst Ökosysteme. Beitrag erklärt die Mechanik und die Risiken für Fischerei und Tourismus.",
+    "visual_idea": "Langzeitbelichtungen, Unterwasser-Actioncam im Plankton, Makroaufnahmen der Algenzellen, AR-Einblendungen der chemischen Reaktion.",
+    "sources": [
+      "Alfred-Wegener-Institut (AWI) Forschungsberichte",
+      "https://www.awi.de",
+      "Interviews mit Meeresbiolog:innen der Uni Kiel"
+    ],
+    "storyline": "6-10 Min: Aufbau über Social-Media-Clips, dann Fahrt auf Forschungsschiff, Live-Experiment zur Lichtreaktion, Einordnung: Gefährlich oder harmlos? Abschluss mit Fototipps für Zuschauer.",
+    "keywords": ["Bildstark", "Wissenschaft", "Umwelt", "gerade aktuell"]
+  },
+  {
+    "title": "TikTok-Archäologie: Verlorene Städte per Laser-Scan aus dem Netz",
+    "summary": "Hobby-Forscher teilen Lidar-Scans von Drohnenflügen über Dschungel und Wüsten. Eine deutsche Crowd entdeckt so neue Strukturen, bevor Institute reagieren.",
+    "relevance": "Zeigt Chancen und Risiken von Citizen Science und Open Data – wer besitzt die Funde und wie verlässlich sind sie?",
+    "visual_idea": "3D-Reconstructions aus Punktwolken, Split-Screen mit Archäologe im Studio, Eye-Tracking der Nutzer, die Strukturen live markieren.",
+    "sources": [
+      "https://opentopography.org/",
+      "Interviews mit Deutschem Archäologischen Institut",
+      "Analyse viraler TikTok-Lidar-Channels"
+    ],
+    "storyline": "7-12 Min: Einstieg mit viralem Clip, Fact-Check mit Expert:in, rechtliche Fragen (Schutz von Fundstätten), Experiment: Crowd markiert neue Struktur live.",
+    "keywords": ["Bildstark", "Wissenschaft", "Innovation", "Entertainment", "Gesellschaftlich Relevant"]
+  },
+  {
+    "title": "E-Sport trifft Chirurgie: Ärzte trainieren Präzision mit Gaming-Rigs",
+    "summary": "Chirurg:innen nutzen Gaming-Controller und VR, um minimalinvasive Eingriffe zu üben. Kliniken in München und Hamburg experimentieren mit Turnierformaten.",
+    "relevance": "Verbindet Gesundheitsversorgung, Arbeitskräftemangel und Technologieakzeptanz. Liefert Diskussion über Sicherheit und Ethik.",
+    "visual_idea": "POV aus VR-Headset, Slow-Motion der Controllerbewegung, Motion-Capture-Overlay auf OP-Kamera, Scoreboard wie im E-Sport.",
+    "sources": [
+      "Studien der TU München zu VR-gestützter Chirurgie",
+      "https://www.hopkinsmedicine.org/news/articles/virtual-reality-surgical-training",
+      "Interviews mit Berufsverband Deutscher Chirurgen"
+    ],
+    "storyline": "10-18 Min: Setup wie ein Bootcamp, dann Challenge zwischen Ärztin und Pro-Gamer, Expertenkommentar zu Lerneffekten, Fazit: Wo VR heute schon Leben rettet.",
+    "keywords": ["Bildstark", "Wissenschaft", "Innovation", "Entertainment", "Gesellschaftlich Relevant"]
+  },
+  {
+    "title": "Die letzte Generation der Gletscherführer am Mont Blanc",
+    "summary": "Steigende Temperaturen machen klassische Routen unsicher. Wir begleiten Bergführer, die ihre Arbeit an den Klimawandel anpassen und neue Regeln entwickeln.",
+    "relevance": "Zeigt direkte Auswirkungen der Erderwärmung auf Arbeitsplätze und regionale Kultur. Verbindung von Abenteuer, Umwelt und Wirtschaft.",
+    "visual_idea": "Helmkameras auf Klettersteig, Drohne im Sonnenaufgang, Zeitraffer des Eisrückzugs mit Archivmaterial, animierte 3D-Gefahrenkarte.",
+    "sources": [
+      "Berichte der französischen Bergwacht",
+      "https://www.ipcc.ch/",
+      "Interviews mit lokalen Bergführerverbänden"
+    ],
+    "storyline": "12-20 Min: Dramatischer Einstieg mit Steinschlag-Alarm, dann Alltag der Guides, wissenschaftliche Einordnung, Training neuer Sicherheitsrouten, persönlicher Ausblick der Protagonisten.",
+    "keywords": ["Bildstark", "Umwelt", "Abenteuer", "Gesellschaftlich Relevant", "gerade aktuell"]
+  }
+]

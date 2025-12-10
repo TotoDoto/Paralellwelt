@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galileo Rechercheboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050915;
+      --panel: rgba(9, 18, 40, 0.82);
+      --accent: #00b7ff;
+      --accent-warm: #ff6b00;
+      --text: #f1f5ff;
+      --muted: #c3c8d6;
+      --card: rgba(11, 19, 43, 0.9);
+      --border: rgba(255, 255, 255, 0.06);
+      --success: #76ffb2;
+      --halo: rgba(0, 183, 255, 0.15);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Barlow", "Segoe UI", system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(0,183,255,0.2), transparent 35%),
+        radial-gradient(circle at 80% 20%, rgba(255,107,0,0.16), transparent 32%),
+        radial-gradient(circle at 70% 80%, rgba(0,129,255,0.18), transparent 25%),
+        linear-gradient(140deg, #030712 0%, #030b17 45%, #030c1b 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(transparent 95%, rgba(255,255,255,0.04) 96%),
+                  linear-gradient(90deg, transparent 95%, rgba(255,255,255,0.04) 96%);
+      background-size: 120px 120px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+    header {
+      position: relative;
+      padding: 26px 24px 18px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .logo-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: linear-gradient(120deg, rgba(0,183,255,0.18), rgba(255,107,0,0.14));
+      border: 1px solid var(--border);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #e5f3ff;
+      box-shadow: 0 12px 40px rgba(0,183,255,0.18);
+    }
+    h1 {
+      margin: 14px 0 4px;
+      font-family: "Barlow Condensed", "Barlow", system-ui;
+      font-size: 2.8rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    p.lead {
+      color: var(--muted);
+      margin: 10px auto 0;
+      font-size: 1.05rem;
+      max-width: 760px;
+    }
+    .hero-band {
+      max-width: 1200px;
+      margin: 16px auto 0;
+      padding: 14px 20px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: linear-gradient(120deg, rgba(0,183,255,0.16), rgba(4,20,52,0.85));
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      box-shadow: 0 16px 60px rgba(0, 0, 0, 0.35);
+    }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: #e9f3ff;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    main {
+      position: relative;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 20px 22px;
+      box-shadow: 0 20px 70px rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+    }
+    .panel h2 {
+      margin: 4px 0 2px;
+      font-size: 1.2rem;
+      letter-spacing: 0.02em;
+    }
+    .panel p { margin: 0; color: var(--muted); }
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.18);
+    }
+    .filter-option input { accent-color: var(--accent); }
+    .filter-option:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 16px 40px rgba(0,183,255,0.12); }
+    .filter-option span { color: #e9f2ff; font-size: 0.98rem; }
+    .actions {
+      margin: 14px 0 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    button {
+      background: linear-gradient(120deg, var(--accent) 0%, #42d4ff 100%);
+      color: #021224;
+      border: none;
+      padding: 11px 15px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s, filter 0.2s;
+      box-shadow: 0 12px 30px rgba(0, 183, 255, 0.35);
+      letter-spacing: 0.02em;
+    }
+    button:hover { transform: translateY(-1px) scale(1.01); filter: brightness(1.04); }
+    button.secondary {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+    .results-meta {
+      margin: 18px 0 12px;
+      color: var(--muted);
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 18% 20%, var(--halo), transparent 45%);
+      pointer-events: none;
+    }
+    .card h3 {
+      margin: 0;
+      font-size: 1.15rem;
+      color: #fff;
+    }
+    .score {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: rgba(0,183,255,0.16);
+      border-radius: 40px;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 0.9rem;
+      width: fit-content;
+      border: 1px solid rgba(0,183,255,0.4);
+    }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .chip.match { border-color: var(--accent); color: #fff; background: rgba(0,183,255,0.12); }
+    .chip.badge { background: rgba(255,107,0,0.14); border-color: rgba(255,107,0,0.4); color: #ffd5b4; }
+    .section-title {
+      margin: 8px 0 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.78rem;
+    }
+    .text { margin: 0; color: #e7e9ef; line-height: 1.48; }
+    ul.sources {
+      margin: 4px 0 0;
+      padding-left: 18px;
+      color: #d9dce2;
+      line-height: 1.45;
+    }
+    .badge-green { color: var(--success); font-weight: 700; }
+    .empty { color: var(--muted); text-align: center; padding: 24px 0; }
+    footer { text-align: center; color: var(--muted); padding: 24px 0 32px; font-size: 0.9rem; }
+    @media (max-width: 900px) {
+      h1 { font-size: 2.2rem; }
+      .hero-band { margin-left: 18px; margin-right: 18px; }
+    }
+    @media (max-width: 640px) {
+      header { padding: 24px 18px 16px; }
+      main { padding: 0 18px 42px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <header>
+    <div class="logo-tag">Galileo • Recherche</div>
+    <h1>Story Radar</h1>
+    <p class="lead">Finde bildstarke, journalistisch solide Themen im Galileo-Look – priorisiert nach deinen Schlagwörtern.</p>
+    <div class="hero-band">
+      <div class="hero-pill">⚡ Bildstarke Ideen</div>
+      <div class="hero-pill">🧭 5–20 Min Storylines</div>
+      <div class="hero-pill">🎯 Ranking nach Schlagwörtern</div>
+      <div class="hero-pill">✅ Quellencheck</div>
+    </div>
+  </header>
+  <main>
+    <section class="panel" aria-labelledby="filter-heading">
+      <div class="actions">
+        <div>
+          <strong id="filter-heading">Galileo-Schlagwörter</strong>
+          <div class="results-meta" id="selected-info">Lade Themen …</div>
+        </div>
+        <div style="flex:1"></div>
+        <button id="select-all">Alle auswählen</button>
+        <button id="select-none" class="secondary">Zurücksetzen</button>
+      </div>
+      <p style="margin: 2px 0 10px; color: var(--muted);">Nutze die Auswahl, um die Reihenfolge der Themenkarten wie in der Sendungsredaktion zu priorisieren.</p>
+      <div class="filters" id="keyword-grid"></div>
+    </section>
+
+    <section style="margin-top: 18px;" aria-live="polite">
+      <div class="results-meta" id="results-meta">Bereite Ergebnisse vor …</div>
+      <div class="card-grid" id="results"></div>
+      <div class="empty" id="empty-state" hidden>Keine Treffer mit dieser Auswahl. Probiere mehr Schlagwörter.</div>
+    </section>
+  </main>
+  <footer>Designed für Galileo Redaktionsteams • GitHub Pages ready</footer>
+
+  <script>
+    const KEYWORDS = [
+      "Bildstark",
+      "Gesellschaftlich Relevant",
+      "gerade aktuell",
+      "Wissenschaft",
+      "Entertainment",
+      "Innovation",
+      "Umwelt",
+      "Abenteuer",
+    ];
+
+    const state = {
+      topics: [],
+      selected: new Set(KEYWORDS),
+    };
+
+    const keywordGrid = document.getElementById('keyword-grid');
+    const selectedInfo = document.getElementById('selected-info');
+    const resultsContainer = document.getElementById('results');
+    const resultsMeta = document.getElementById('results-meta');
+    const emptyState = document.getElementById('empty-state');
+
+    function renderFilters() {
+      keywordGrid.innerHTML = '';
+      KEYWORDS.forEach((kw, index) => {
+        const id = `kw-${index}`;
+        const wrapper = document.createElement('label');
+        wrapper.className = 'filter-option';
+        wrapper.innerHTML = `
+          <input type="checkbox" id="${id}" value="${kw}" ${state.selected.has(kw) ? 'checked' : ''} />
+          <span>${kw}</span>
+        `;
+        wrapper.querySelector('input').addEventListener('change', (e) => {
+          if (e.target.checked) {
+            state.selected.add(kw);
+          } else {
+            state.selected.delete(kw);
+          }
+          update();
+        });
+        keywordGrid.appendChild(wrapper);
+      });
+    }
+
+    function scoreTopic(topic) {
+      const matches = topic.keywords.filter((kw) => state.selected.has(kw));
+      return { score: matches.length, matches };
+    }
+
+    function renderTopics() {
+      resultsContainer.innerHTML = '';
+      const scored = state.topics
+        .map((topic) => ({ topic, ...scoreTopic(topic) }))
+        .filter(({ score }) => score > 0)
+        .sort((a, b) => (b.score - a.score) || a.topic.title.localeCompare(b.topic.title));
+
+      const selectedCount = state.selected.size;
+      const selectedText = selectedCount === KEYWORDS.length
+        ? 'Alle Galileo-Schlagwörter aktiv'
+        : `${selectedCount} Schlagwörter aktiv: ${[...state.selected].join(', ')}`;
+      selectedInfo.textContent = selectedText;
+
+      resultsMeta.textContent = scored.length
+        ? `Sortiert nach Treffern: ${scored.length} Themen mit mindestens einem Keyword.`
+        : 'Keine Treffer für die aktuelle Auswahl.';
+
+      emptyState.hidden = scored.length > 0;
+
+      scored.forEach(({ topic, score, matches }) => {
+        const card = document.createElement('article');
+        card.className = 'card';
+
+        const unmatched = topic.keywords.filter((kw) => !matches.includes(kw));
+        const matchLine = matches.length
+          ? `Treffer: ${matches.join(', ')}`
+          : 'Keine Treffer';
+
+        card.innerHTML = `
+          <div style="display:flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+            <h3>${topic.title}</h3>
+            <span class="score" title="Anzahl passender Schlagwörter">${score} ★</span>
+          </div>
+          <div class="chip-row" aria-label="Treffer">${matches.map((m) => `<span class="chip match">${m}</span>`).join('')}</div>
+          <div class="chip-row" aria-label="weitere Schlagwörter">${unmatched.map((u) => `<span class="chip">${u}</span>`).join('')}</div>
+          <div class="section-title">Zusammenfassung</div>
+          <p class="text">${topic.summary}</p>
+          <div class="section-title">Relevanz</div>
+          <p class="text">${topic.relevance}</p>
+          <div class="section-title">Kreative visuelle Umsetzung</div>
+          <p class="text">${topic.visual_idea}</p>
+          <div class="section-title">Quellen (seriöse Recherche)</div>
+          <ul class="sources">${topic.sources.map((s) => `<li>${s}</li>`).join('')}</ul>
+          <div class="section-title">Storyline (5–20 Minuten)</div>
+          <p class="text">${topic.storyline}</p>
+          <p class="text" style="color: var(--muted); font-size: 0.9rem;">${matchLine}</p>
+        `;
+
+        resultsContainer.appendChild(card);
+      });
+    }
+
+    function update() {
+      renderFilters();
+      renderTopics();
+    }
+
+    async function init() {
+      try {
+        const res = await fetch('topics.json');
+        if (!res.ok) throw new Error(`Status ${res.status}`);
+        const data = await res.json();
+        state.topics = data;
+        update();
+      } catch (err) {
+        resultsMeta.textContent = 'Themen konnten nicht geladen werden.';
+        emptyState.hidden = false;
+        emptyState.textContent = `Fehler beim Laden: ${err.message}`;
+        console.error(err);
+      }
+    }
+
+    document.getElementById('select-all').addEventListener('click', () => {
+      state.selected = new Set(KEYWORDS);
+      update();
+    });
+    document.getElementById('select-none').addEventListener('click', () => {
+      state.selected = new Set();
+      update();
+    });
+
+    init();
+  </script>
+</body>
+</html>
